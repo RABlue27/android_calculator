@@ -1,6 +1,8 @@
 package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,10 +19,6 @@ import java.util.*;
 public class MainActivity extends AppCompatActivity {
 
 
-    //TODO: Regular clear (ac implinmented, not regular clear.
-
-
-
 
     public double sum;
     public int firstVal;
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public double lastSum = 0;
     public String op = "";
     public double memory = 0;
+    public boolean negate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (secondVal == 0 && op.equals("")) {
                     op = "+";
+
 
                 }
 
@@ -57,6 +57,23 @@ public class MainActivity extends AppCompatActivity {
                     secondVal = 0;
                 }
 
+                if (negate) {
+                    switch (op) {
+                        case "+":
+                            sum = firstVal - secondVal;
+                            break;
+                        case "-":
+                            sum = firstVal = secondVal;
+                            break;
+                        case "x":
+                            sum = firstVal / secondVal;
+                            break;
+                        case "/":
+                            sum = (double) firstVal * secondVal;
+                            break;
+                    }
+                }
+                if (!negate) {
                 switch (op) {
                     case "+":
                         sum = firstVal + secondVal;
@@ -70,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     case "/":
                         sum = (double) firstVal / secondVal;
                         break;
-
+                    }
                 }
 
                 setText(v, String.valueOf(sum));
@@ -83,8 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 firstVal = (int) lastSum;
                 secondVal = 0;
                 sum = 0;
+                negate = false;
             }
         });
+
+
 
         findViewById(R.id.one).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -287,7 +307,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //TODO: regular clear
+        findViewById(R.id.negate).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                negate = true;
+                setText(v, "-");
+            }
+        });
+
+
+        //short clear
+        findViewById(R.id.c).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (Equals && !isCurrentlySum) {
+                    secondVal = secondVal/10;
+                    setText(v, String.valueOf(secondVal));
+                }
+                else if (!Equals && !isCurrentlySum) {
+                    firstVal = firstVal / 10;
+                    setText(v, String.valueOf(firstVal));
+                }
+                else {
+                    clearBoard(v);
+                }
+            }
+        });
 
         findViewById(R.id.ac).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
